@@ -1,6 +1,3 @@
-Got it! Here's the simplified and consolidated guide, where all your users need to do is run the script to load ConceptNet into Neo4j.
-
----
 
 ## GAIE Setup Guide: One Script to Load ConceptNet
 
@@ -146,7 +143,3 @@ This script will start exploring the ConceptNet knowledge base and generate nove
 ### 6. You're Done! 🎉
 
 With these steps completed, ConceptNet is now loaded into Neo4j, and you’re all set to run GAIE to explore and generate new ideas!
-
---- 
-
-Now, users just need to run the `load_to_conceptnet.py` script to import ConceptNet into Neo4j and proceed with using GAIE for idea generation!
