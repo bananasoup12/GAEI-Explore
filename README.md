@@ -66,44 +66,6 @@ This Python script will connect to your Neo4j database and load the ConceptNet d
 
 1. **Download the `load_to_conceptnet.py` script** (copy the following code into a new file `load_to_conceptnet.py`):
 
-```python
-from neo4j import GraphDatabase
-import csv
-
-class ConceptNetLoader:
-    def __init__(self, uri, username, password):
-        self.driver = GraphDatabase.driver(uri, auth=(username, password))
-    
-    def close(self):
-        self.driver.close()
-    
-    def load_to_conceptnet(self, nodes_csv, edges_csv):
-        with self.driver.session() as session:
-            # Create nodes
-            with open(nodes_csv, 'r') as file:
-                reader = csv.DictReader(file)
-                for row in reader:
-                    session.run("MERGE (n:Concept {uri: $uri, label: $label})", 
-                                uri=row['uri'], label=row['label'])
-            
-            # Create edges (relationships)
-            with open(edges_csv, 'r') as file:
-                reader = csv.DictReader(file)
-                for row in reader:
-                    session.run("""
-                    MATCH (a:Concept {uri: $start}), (b:Concept {uri: $end})
-                    MERGE (a)-[r:RELATIONSHIP {rel: $rel}]->(b)
-                    """, start=row['start'], end=row['end'], rel=row['rel'])
-
-# Initialize loader
-loader = ConceptNetLoader(uri="bolt://localhost:7687", username="neo4j", password="neo4j")
-
-# Load CSVs into ConceptNet
-loader.load_to_conceptnet('path/to/nodes.csv', 'path/to/edges.csv')
-
-loader.close()
-```
-
 2. **Replace file paths**:
    - Make sure you replace `'path/to/nodes.csv'` and `'path/to/edges.csv'` with the actual file paths for the ConceptNet CSVs on your system.
 
@@ -118,23 +80,9 @@ loader.close()
 
 Now that ConceptNet is loaded into Neo4j, you can run GAIE's idea generation system. Here’s how:
 
-```python
-from graph_config import GraphConfig
-from graph import Neo4jGraph
-from path_generator import RandomPathGenerator
-
-# Setup the graph config (make sure Neo4j is running)
-config = GraphConfig(uri="bolt://localhost:7687", username="neo4j", password="neo4j")
-
-# Initialize the graph and path generator
-graph = Neo4jGraph(config)
-path_generator = RandomPathGenerator(graph)
-
-# Example: Generate and print ideas
-ideas = graph.generate_ideas()
-for idea in ideas:
-    print(idea)
-```
+   ```bash
+   python explore.py
+   ```
 
 This script will start exploring the ConceptNet knowledge base and generate novel ideas based on the graph.
 
